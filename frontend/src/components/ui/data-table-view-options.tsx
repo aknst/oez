@@ -28,7 +28,7 @@ export function DataTableViewOptions<TData>({
           Колонки
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px]">
+      <DropdownMenuContent align="end" className="w-auto">
         <DropdownMenuLabel>Отображение</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table

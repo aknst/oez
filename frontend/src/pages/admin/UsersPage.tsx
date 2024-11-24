@@ -1,64 +1,32 @@
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  TableState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import React from "react";
-import {
-  usersDeleteUser,
-  usersReadUsers,
-  usersUpdateUser,
-} from "@/client/services.gen";
-import { UserPublic, UserUpdate } from "@/client/types.gen";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { usersDeleteUser, usersReadUsers } from "@/client/services.gen";
+import { UserPublic } from "@/client/types.gen";
 import { DataTable } from "@/components/ui/data-table";
 import UpdateUserDialog, {
   useUserDialogState,
-} from "@/components/dialogs/UpdateUserDialog";
-import CreateUserDialog from "@/components/dialogs/CreateUserDialog";
+} from "@/components/dialogs/users/UpdateUserDialog";
+import CreateUserDialog from "@/components/dialogs/users/CreateUserDialog";
 import { toast } from "sonner";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export function UsersPage() {
+  const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState<UserPublic[]>([]);
 
   const loadUsers = async () => {
+    setLoading(true);
     try {
       const response = await usersReadUsers();
       if (response) {
@@ -66,6 +34,8 @@ export function UsersPage() {
       }
     } catch (error) {
       setUsers([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,16 +55,7 @@ export function UsersPage() {
       accessorKey: "full_name",
       meta: "ФИО",
       header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() =>
-              column.toggleSorting(column.getIsSorted() === "asc")
-            }>
-            ФИО
-            <ArrowUpDown />
-          </Button>
-        );
+        return <DataTableColumnHeader column={column} title="ФИО" />;
       },
       cell: ({ row }) => <div>{row.getValue("full_name")}</div>,
     },
@@ -102,16 +63,7 @@ export function UsersPage() {
       meta: "Почта",
       accessorKey: "email",
       header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() =>
-              column.toggleSorting(column.getIsSorted() === "asc")
-            }>
-            Почта
-            <ArrowUpDown />
-          </Button>
-        );
+        return <DataTableColumnHeader column={column} title="Почта" />;
       },
       cell: ({ row }) => (
         <div className="lowercase">{row.getValue("email")}</div>
@@ -119,8 +71,11 @@ export function UsersPage() {
     },
     {
       meta: "Активен",
+      enableSorting: false,
       accessorKey: "is_active",
-      header: () => <div>Активен</div>,
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Активен" />;
+      },
       cell: ({ row }) => {
         return row.getValue("is_active") ? (
           <Checkbox id="terms2" checked disabled />
@@ -133,7 +88,9 @@ export function UsersPage() {
       id: "is_superuser",
       meta: "Админ",
       accessorKey: "is_superuser",
-      header: () => <div>Админ</div>,
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Админ" />;
+      },
       cell: ({ row }) => {
         return row.getValue("is_superuser") ? (
           <Checkbox id="terms2" checked disabled />
@@ -199,7 +156,7 @@ export function UsersPage() {
         data={data}
         onUpdate={onUpdate}
       />
-      <DataTable columns={userColumns} data={users} />
+      <DataTable columns={userColumns} data={users} loading={loading} />
     </div>
   );
 }

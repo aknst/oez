@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/nav/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,10 +13,35 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { ModeToggle } from "../common/ModeToggle";
+import { navData } from "@/config/site-config";
 
 export default function SidebarLayout() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const findActivePage = () => {
+    for (const [groupName, items] of Object.entries(navData)) {
+      const activePage = items.find((item) => item.url === currentPath);
+      if (activePage) {
+        return { activePage, groupName };
+      }
+    }
+    return null;
+  };
+
+  const activePageInfo = findActivePage();
+
+  if (!activePageInfo) return null;
+
+  const { activePage, groupName } = activePageInfo;
+  const groupTitle =
+    groupName === "navMain"
+      ? "Основные страницы"
+      : groupName === "navAdmin"
+      ? "Администрирование"
+      : "";
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -28,13 +53,13 @@ export default function SidebarLayout() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
+                  <BreadcrumbLink>{groupTitle}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>
+                    {activePage.title || activePage.title}
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

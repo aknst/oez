@@ -6,3 +6,8 @@ app.egg-info
 htmlcov
 .cache
 .venv
+app/ai/bert/
+app/ai/ensemble/
+app/ai/albert-base-v2/
+app/ai/RuBioRoBERTa/
+app/ai/oez-models.zip

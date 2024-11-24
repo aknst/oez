@@ -1,43 +1,42 @@
 import {
   BookOpen,
-  GalleryVerticalEnd,
-  Settings2,
-  SquareTerminal,
+  Hospital,
+  Stethoscope,
+  UserRoundCheck,
   Users,
 } from "lucide-react";
 
 export const team = {
   name: "Диагностический ассистент",
-  logo: <GalleryVerticalEnd className="size-4" />,
-  plan: "Команда Risk",
+  logo: <Hospital className="size-4" />,
+  plan: "Разработка команды Risk",
   url: "/",
 };
 
 export const navData = {
   navMain: [
     {
-      title: "Новый запрос",
+      title: "Новый прием",
       url: "/",
-      icon: SquareTerminal,
+      icon: Stethoscope,
       items: [],
     },
-
     {
-      title: "История приёмов",
+      title: "История приемов",
       url: "/history",
       icon: BookOpen,
-    },
-    {
-      title: "Настройки",
-      url: "/settings",
-      icon: Settings2,
     },
   ],
   navAdmin: [
     {
-      name: "Пользователи",
-      url: "/users",
+      title: "Пациенты",
+      url: "/patients",
       icon: Users,
+    },
+    {
+      title: "Пользователи",
+      url: "/users",
+      icon: UserRoundCheck,
     },
   ],
 };

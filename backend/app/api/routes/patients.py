@@ -108,6 +108,9 @@ def delete_patient(
     patient = session.get(Patient, id)
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
+    
+    for disease in patient.diseases:
+        session.delete(disease)
 
     session.delete(patient)
     session.commit()

@@ -24,15 +24,18 @@ import {
 import { DataTablePagination } from "./data-table-pagination";
 import React from "react";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { Spinner } from "./spinner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  loading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  loading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -108,7 +111,7 @@ export function DataTable<TData, TValue>({
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center">
-                  No results.
+                  {loading ? <Spinner /> : "Нет результатов"}
                 </TableCell>
               </TableRow>
             )}

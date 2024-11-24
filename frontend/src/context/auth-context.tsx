@@ -1,9 +1,6 @@
-import {
-  client,
-  loginLoginAccessToken,
-  usersReadUserMe,
-} from "@/client/services.gen";
+import { loginLoginAccessToken, usersReadUserMe } from "@/client/services.gen";
 import { LoginLoginAccessTokenData, UserPublic } from "@/client/types.gen";
+import { useAuthStore } from "@/states/auth-state";
 import React from "react";
 
 export interface IAuthContext {
@@ -28,12 +25,12 @@ export function useAuthContext() {
 export type AuthProviderProps = React.PropsWithChildren;
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [loading, setLoading] = React.useState(true);
-  const [sessionToken, setSessionToken] = React.useState<string | null>(
-    () => localStorage.getItem("sessionToken") // Инициализация токена из localStorage
+  const [loading, setLoading] = React.useState(false);
+  const [sessionToken, setSessionToken] = React.useState<string | null>(() =>
+    localStorage.getItem("sessionToken")
   );
-  const [sessionUser, setSessionUser] = React.useState<UserPublic | null>(
-    () => JSON.parse(localStorage.getItem("sessionUser") || "null") // Инициализация пользователя из localStorage
+  const [sessionUser, setSessionUser] = React.useState<UserPublic | null>(() =>
+    JSON.parse(localStorage.getItem("sessionUser") || "null")
   );
 
   React.useEffect(() => {
@@ -52,7 +49,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const refreshSessionUser = async (): Promise<UserPublic | null> => {
     setLoading(true);
     try {
-      const response = await usersReadUserMe();
+      const response = await usersReadUserMe({
+        headers: {
+          "Authorization": `Bearer ${sessionToken}`,
+        },
+      });
       if (response.data) {
         setSessionUser(response.data);
         localStorage.setItem("sessionUser", JSON.stringify(response.data));
@@ -82,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const { access_token } = response.data;
         setSessionToken(access_token);
         localStorage.setItem("sessionToken", access_token);
-        return await refreshSessionUser();
+        useAuthStore.getState().setToken(access_token);
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -93,6 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("sessionToken");
+    useAuthStore.getState().setToken("");
     localStorage.removeItem("sessionUser");
     setSessionToken(null);
     setSessionUser(null);
