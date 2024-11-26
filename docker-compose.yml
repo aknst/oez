@@ -115,9 +115,9 @@ services:
           "-f",
           "http://localhost:8000/api/v1/utils/health-check/",
         ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+      interval: 20s
+      timeout: 10s
+      retries: 15
 
     build:
       context: ./backend
