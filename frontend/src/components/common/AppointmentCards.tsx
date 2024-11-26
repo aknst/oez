@@ -9,7 +9,7 @@ export function AppointmentCards({ appointments }: AppointmentCardsProps) {
   if (!appointments || appointments.length === 0) {
     return (
       <div className="text-center text-muted-foreground">
-        No appointments available.
+        Нет доступных приемов.
       </div>
     );
   }

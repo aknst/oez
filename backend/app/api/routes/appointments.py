@@ -68,6 +68,15 @@ def create_appointment(
         session.refresh(disease)
 
         appointment_in.disease_id = disease.id
+    else:
+        disease = session.get(Disease, appointment_in.disease_id)
+        if disease:
+            disease.last_diagnosis = format_disease_last_diagnosis(appointment_in)
+            disease.sqlmodel_update(disease)
+            session.add(disease)
+            session.commit()
+            session.refresh(disease)
+
 
     doctor_id = current_user.id
     
@@ -100,7 +109,6 @@ def read_appointments(
     disease_id: Optional[uuid.UUID] = Query(None, description="Filter appointments by disease ID"),
     doctor_id: Optional[uuid.UUID] = Query(None, description="Filter appointments by doctor ID"),
     sort_order: Optional[str] = Query("asc", enum=["asc", "desc"], description="Sort order by appointment date"),
-    extend: Optional[bool] = Query(False, description="Flag to extend the query with joins")
 ) -> Any:
     """
     Retrieve appointments with optional filtering by patient ID, disease ID, doctor ID, sorting by date,
@@ -123,9 +131,6 @@ def read_appointments(
         statement = statement.order_by(Appointment.created_at.asc())
 
     statement = statement.offset(skip).limit(limit)
-
-    if extend:
-        statement = statement.join(Appointment.patient).join(Appointment.disease).join(Appointment.doctor)
 
     count_query = select(func.count()).select_from(Appointment)
     if patient_id:

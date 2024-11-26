@@ -15,7 +15,7 @@ const AppointmentDetail = ({
       <p className="mt-4 scroll-m-20 border-b pb-1 font-semibold tracking-tight transition-colors">
         {title}:
       </p>
-      <p className="leading-7">{content}</p>
+      <p className="leading-7 text-sm">{content}</p>
     </div>
   );
 };
@@ -60,10 +60,15 @@ export function AppointmentCard({
             />
           )}
           {appointment.doctor_recommendations && (
-            <AppointmentDetail
-              title="Рекомендации врача"
-              content={appointment.doctor_recommendations}
-            />
+            <div>
+              <p className="mt-4 scroll-m-20 border-b pb-1 font-semibold tracking-tight transition-colors mb-2">
+                Рекомендации врача:
+              </p>
+              <Textarea
+                className="h-36"
+                readOnly
+                value={appointment.doctor_recommendations}></Textarea>
+            </div>
           )}
           {appointment.nlp_diagnosis && (
             <AppointmentDetail

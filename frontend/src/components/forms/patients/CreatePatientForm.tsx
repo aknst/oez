@@ -86,6 +86,7 @@ export function CreatePatientForm({
       toast.error("Не удалось создать пациента.");
     } finally {
       setIsLoading(false);
+      form.reset();
     }
   }
 

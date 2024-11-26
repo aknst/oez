@@ -275,7 +275,10 @@ export function AppointmentForm({
                       buttonClassName="w-full	"
                       disabled={mode === "view"}
                     />
-                    <FormDescription>Выберите болезнь.</FormDescription>
+                    <FormDescription>
+                      Выберите болезнь, в скобках указано время последнего
+                      приема в рамках болезни.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -389,7 +392,12 @@ export function AppointmentForm({
                   <FormItem>
                     <FormLabel>Рекомендации от NLP модели</FormLabel>
                     <FormControl>
-                      <Textarea readOnly placeholder="" {...field} />
+                      <Textarea
+                        readOnly
+                        className="h-32"
+                        placeholder=""
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription>
                       Здесь отображаются рекомендации по лечению, предложенные
@@ -450,7 +458,7 @@ export function AppointmentForm({
                       readOnly={mode === "view"}
                     />
                   </FormControl>
-                  <FormDescription>Укажите диагноз.</FormDescription>
+                  {/* <FormDescription>Укажите диагноз.</FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -468,9 +476,9 @@ export function AppointmentForm({
                       readOnly={mode === "view"}
                     />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     Укажите рекомендации по лечению.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}

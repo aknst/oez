@@ -475,10 +475,6 @@ export type AppointmentsReadAppointmentsData = {
          * Filter appointments by doctor ID
          */
         doctor_id?: (string | null);
-        /**
-         * Flag to extend the query with joins
-         */
-        extend?: (boolean | null);
         limit?: number;
         /**
          * Filter appointments by patient ID

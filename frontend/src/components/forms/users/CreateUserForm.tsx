@@ -69,6 +69,7 @@ export function CreateUserForm({
       toast.error("Не удалось создать пользователя.");
     } finally {
       setIsLoading(false);
+      form.reset();
     }
   }
 

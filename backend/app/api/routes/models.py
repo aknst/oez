@@ -60,7 +60,7 @@ def model_inference(
         result = get_bert_result(prompt.lower().strip())
     elif model == "ensemble":
         prompt = f"{request.complaints} {request.anamnesis} {request.objective_status}"
-        result = get_ensemble_result(prompt.lower())
+        result = get_ensemble_result(prompt.lower().strip())
     else:
         raise HTTPException(status_code=400, detail=f"Модель '{model}' не поддерживается")
 

@@ -20,8 +20,10 @@ import UpdateUserDialog, {
 import CreateUserDialog from "@/components/dialogs/users/CreateUserDialog";
 import { toast } from "sonner";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { useAuthContext } from "@/context/auth-context";
 
 export function UsersPage() {
+  const { refreshSessionUser } = useAuthContext();
   const [loading, setLoading] = React.useState(false);
   const [users, setUsers] = React.useState<UserPublic[]>([]);
 
@@ -48,6 +50,7 @@ export function UsersPage() {
   const onUpdate = async () => {
     await loadUsers();
     toggleModal();
+    await refreshSessionUser();
   };
 
   const userColumns: ColumnDef<UserPublic>[] = [
