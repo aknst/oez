@@ -7,23 +7,36 @@
 
 ## Использование
 
-Краткая инструкция для запуска сайта:
+Для развертывания сайта используется Docker.
 
-1. Установить Docker
-2. Установить GitBash
-3.  Скачать архив: https://drive.google.com/file/d/1yr93jncj7s1gezVJeZLtFW10eIipO10F/view?usp=sharing
-4. Запустить Терминал GitBash в Docker:
-5. $ cd (папка, в которую хотите сохранить репозиторий)
-6. $ git clone https://github.com/aknst/oez \
-После завершения в ранее указанной папке появится папка oez
-7. Распаковать архив, содержимое папки models скопировать и вставить в oez/backend/app/ai 
-Выполнить в Терминале GitBash в Docker :
-8. $ cd oez 
-9. $ docker compose up -d 
+### Краткая инструкция для запуска
 
-По ссылкам будут: \
-http://localhost:5173/ -- фронтенд \
-http://localhost:8000/docs --  бекенд
+1. Выполнить `git clone https://github.com/aknst/oez`
+2. Выполнить `cd oez`
+3. Скачать модели: https://drive.google.com/file/d/1yr93jncj7s1gezVJeZLtFW10eIipO10F/view?usp=sharing
+4. Распаковать архив, содержимое папки models скопировать и вставить в `./backend/app/ai`. Итоговое содержимое папки `./backend/app/ai`:
+```
+oez\backend\app\ai> dir
+albert-base-v2
+bert
+ensemble
+RuBioRoBERTa
+bert.py
+ensemble.py
+gpt.csv
+mkb.csv
+```
+5. Выполнить `docker compose up -d`
+
+### Доступ к сайту
+
+- **Frontend:** [http://localhost:5173/](http://localhost:5173/)
+- **Backend:** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+### Данные для авторизации на сайте
+
+- **Логин:** `admin@example.com`
+- **Пароль:** `changethis`
 
 ## Функциональные возможности
 1)  Естественно, при начале работы с сайтом необходимо сделать аккаунт: в нашем случае это аккаунт врача. При регистрации пользователя ему на почту приходит письмо с логином и паролем 
